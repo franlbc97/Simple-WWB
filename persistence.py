@@ -90,6 +90,14 @@ class DBPersistence(Persistence):
         else:
             return int(res[0][0])
         
+    def GetListUsersOrderedByName(self):
+        query = "SELECT * FROM participants ORDER BY 2 ASC"
+        res = self._executeQuery(query)
+        if res is None:
+            return -1
+        else:
+            return res  
+        
     def GetKillsPodium(self):
         query = "SELECT * FROM innodb.participants ORDER BY kills DESC LIMIT 3"
         res = self._executeQuery(query)
@@ -136,9 +144,7 @@ class DBPersistence(Persistence):
             db_cursor = db.cursor()
             try:
                 db_cursor.execute(query)
-                res = []
-                for row in db_cursor:
-                    res.append(row) 
+                res = list(db_cursor.fetchall())
                 return res         
             except:
                 print ("Error ocurred")
